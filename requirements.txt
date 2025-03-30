@@ -1,0 +1,9 @@
+django
+requests
+opencv-python
+secure-smtplib
+celery
+django-celery-results
+psycopg2-binary
+redis
+dotenv

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PNR Status</title>
+</head>
+<body style="font-family: 'Courier New', Courier, monospace; background-color: #1e1e1e; color: #d4d4d4; margin: 0; padding: 20px;">
+
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; box-sizing: border-box; background-color: #252526;">
+        <h1 style="color: #569cd6; text-align: center;">PNR Status</h1>
+
+        {% if response.trainNumber %}
+            <div style="margin-top: 20px;">
+                <div style="color: #9cdcfe; font-weight: bold;">PNR Number:</div>
+                <div>{{ response.pnrNumber }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Date of Journey:</div>
+                <div>{{ response.dateOfJourney }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Train Number:</div>
+                <div>{{ response.trainNumber }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Train Name:</div>
+                <div>{{ response.trainName }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">From:</div>
+                <div>{{ response.sourceStation }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">To:</div>
+                <div>{{ response.destinationStation }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Reservation Upto:</div>
+                <div>{{ response.reservationUpto }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Boarding Point:</div>
+                <div>{{ response.boardingPoint }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Class:</div>
+                <div>{{ response.journeyClass }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Passengers:</div>
+                <div>{{ response.numberOfpassenger }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Chart Status:</div>
+                <div>{{ response.chartStatus }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Booking Fare:</div>
+                <div>{{ response.bookingFare }} INR</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Quota:</div>
+                <div>{{ response.quota }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Booking Date:</div>
+                <div>{{ response.bookingDate }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Arrival Date:</div>
+                <div>{{ response.arrivalDate }}</div>
+
+                <div style="color: #9cdcfe; font-weight: bold;">Distance:</div>
+                <div>{{ response.distance }} Km</div>
+            </div>
+
+            <h2 style="color: #569cd6; text-align: center;">Passenger Details</h2>
+            <div style="margin-top: 20px;">
+                {% for passenger in response.passengerList %}
+                    <div style="margin-bottom: 10px;">
+                        <div style="color: #9cdcfe; font-weight: bold;">S.No.:</div>
+                        <div>{{ passenger.passengerSerialNumber }}</div>
+
+                        <div style="color: #9cdcfe; font-weight: bold;">Booking Status:</div>
+                        <div>{{ passenger.bookingStatus }}</div>
+
+                        <div style="color: #9cdcfe; font-weight: bold;">Coach:</div>
+                        <div>{{ passenger.bookingCoachId }}</div>
+
+                        <div style="color: #9cdcfe; font-weight: bold;">Berth:</div>
+                        <div>{{ passenger.bookingBerthNo }} ({{ passenger.bookingBerthCode }})</div>
+
+                        <div style="color: #9cdcfe; font-weight: bold;">Current Status:</div>
+                        <div>{{ passenger.currentStatus }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <h2 style="color: #569cd6; text-align: center;">Get Live Updates on Email</h2>
+            <div style="text-align: center; margin-top: 20px;">
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="email" style="color: #d4d4d4;">Enter your email id:</label><br>
+                    <input type="email" id="email" name="email" required placeholder="example@domain.com" style="padding: 10px; border: 1px solid #3c3c3c; border-radius: 4px; background-color: #1e1e1e; color: #d4d4d4; width: calc(100% - 22px); max-width: 300px; box-sizing: border-box;"><br>
+                    <button type="submit" style="background-color: #007acc; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px;">Verify</button>
+                </form>
+            </div>
+        {% else %}
+            <p style="text-align: center;">{{ response }}</p>  <!-- Display the error message -->
+        {% endif %}
+    </div>
+
+</body>
+</html>

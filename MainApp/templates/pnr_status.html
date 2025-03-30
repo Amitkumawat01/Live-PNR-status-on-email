@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNR Status</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e; /* Dark background */
+            color: #d4d4d4; /* Light text color */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px; /* Maximum width for larger screens */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #252526; /* Slightly lighter dark background */
+        }
+        th, td {
+            border: 1px solid #3c3c3c; /* Dark border */
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #333333; /* Darker background for headers */
+            color: #9cdcfe; /* Light blue for header text */
+        }
+        h1, h2 {
+            color: #569cd6; /* Accent color for headings */
+            text-align: center;
+        }
+        p {
+            color: #d4d4d4; /* Light text color for paragraphs */
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+        input[type="email"] {
+            padding: 10px;
+            border: 1px solid #3c3c3c;
+            border-radius: 4px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            width: calc(100% - 22px); /* Full width minus padding and border */
+            max-width: 300px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007acc;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #005a9e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>PNR Status</h1>
+
+        {% if response.trainNumber %}
+            <table>
+                <tr>
+                    <th>PNR Number</th><td>{{ response.pnrNumber }}</td>
+                </tr>
+                <tr>
+                    <th>Date of Journey</th><td>{{ response.dateOfJourney }}</td>
+                </tr>
+                <tr>
+                    <th>Train Number</th><td>{{ response.trainNumber }}</td>
+                </tr>
+                <tr>
+                    <th>Train Name</th><td>{{ response.trainName }}</td>
+                </tr>
+                <tr>
+                    <th>From</th><td>{{ response.sourceStation }}</td>
+                </tr>
+                <tr>
+                    <th>To</th><td>{{ response.destinationStation }}</td>
+                </tr>
+                <tr>
+                    <th>Reservation Upto</th><td>{{ response.reservationUpto }}</td>
+                </tr>
+                <tr>
+                    <th>Boarding Point</th><td>{{ response.boardingPoint }}</td>
+                </tr>
+                <tr>
+                    <th>Class</th><td>{{ response.journeyClass }}</td>
+                </tr>
+                <tr>
+                    <th>Passengers</th><td>{{ response.numberOfpassenger }}</td>
+                </tr>
+                <tr>
+                    <th>Chart Status</th><td>{{ response.chartStatus }}</td>
+                </tr>
+                <tr>
+                    <th>Booking Fare</th><td>{{ response.bookingFare }} INR</td>
+                </tr>
+                <tr>
+                    <th>Quota</th><td>{{ response.quota }}</td>
+                </tr>
+                <tr>
+                    <th>Booking Date</th><td>{{ response.bookingDate }}</td>
+                </tr>
+                <tr>
+                    <th>Arrival Date</th><td>{{ response.arrivalDate }}</td>
+                </tr>
+                <tr>
+                    <th>Distance</th><td>{{ response.distance }} Km</td>
+                </tr>
+            </table>
+
+            <h2>Passenger Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Booking Status</th>
+                        <th>Coach</th>
+                        <th>Berth</th>
+                        <th>Current Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for passenger in response.passengerList %}
+                        <tr>
+                            <td>{{ passenger.passengerSerialNumber }}</td>
+                            <td>{{ passenger.bookingStatus }}</td>
+                            <td>{{ passenger.bookingCoachId }}</td>
+                            <td>{{ passenger.bookingBerthNo }} ({{ passenger.bookingBerthCode }})</td>
+                            <td>{{ passenger.currentStatus }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h2>Get Live Updates on Email</h2>
+            <form method="post">
+                {% csrf_token %}
+                <label for="email">Enter your email id:</label><br>
+                <input type="email" id="email" name="email" required placeholder="example@domain.com"><br>
+                <button type="submit">Verify</button>
+            </form>
+        {% else %}
+            <p>{{ response }}</p>  <!-- Display the error message -->
+        {% endif %}
+    </div>
+
+</body>
+</html>

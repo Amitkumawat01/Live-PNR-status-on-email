@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Updates</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #252526;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        h1 {
+            color: #569cd6;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type="email"], input[type="text"] {
+            padding: 10px;
+            border: 1px solid #3c3c3c;
+            border-radius: 4px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            width: calc(100% - 22px);
+            max-width: 300px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+        button, .button-link {
+            background-color: #007acc;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+            font-style: normal;
+        }
+        button:hover, .button-link:hover {
+            background-color: #005a9e;
+        }
+        .message {
+            margin-top: 20px;
+            color: #d4d4d4;
+        }
+        .error {
+            color: #ff4c4c;
+        }
+        #resend-button {
+            display: none; /* Initially hidden */
+        }
+    </style>
+    <script>
+        // Function to show the resend button after 15 seconds
+        function showResendButton() {
+            setTimeout(function() {
+                document.getElementById('resend-button').style.display = 'inline-block';
+            }, 15000); // 15000 milliseconds = 15 seconds
+        }
+    </script>
+</head>
+<body onload="showResendButton()">
+
+    <div class="container">
+        <h1>Email Updates</h1>
+
+        {% if success %}
+            <p class="message">{{ success }}</p>
+            <a href="/PNRStatusTracker/pnr/" class="button-link">Home</a>
+        {% else %}
+            <p>OTP sent to: {{ email }}. <br/> Please check your spam folders too.</p>
+            {% if failure %}
+                <p class="error">{{ failure }}</p>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <label for="otp">Enter OTP:</label><br>
+                <input type="text" id="otp" name="otp" required placeholder="Enter your OTP"><br>
+                <button type="submit">Submit</button>
+            </form>
+            <form method="post" action="{% url 'status' %}" style="margin-top: 10px;">
+                {% csrf_token %}
+                <!-- <input type="hidden" name="email" value="{{ email }}"> -->
+                <button id="resend-button" type="submit">Resend</button>
+            </form>
+        {% endif %}
+    </div>
+
+</body>
+</html>
