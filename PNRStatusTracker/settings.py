@@ -111,6 +111,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+ALLOWED_HOSTS = [
+    'live-pnr-status-on-email-production.up.railway.app',
+    'www.live-pnr-status-on-email-production.up.railway.app',
+    'localhost',
+    '127.0.0.1',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
