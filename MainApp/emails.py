@@ -2,7 +2,9 @@ import smtplib
 import os
 
 sender_email = "pnr.status.on.email@gmail.com"
-app_password = "khnllerqdbxlwehp" 
+app_password = os.environ.get("APP_PASSWORD")
+
+admin_email = "amitkumarsk588@gmail.com"
 
 def send_email(receiver_email,subject,message):
     try:
@@ -11,12 +13,9 @@ def send_email(receiver_email,subject,message):
         server.starttls()
         server.login(sender_email, app_password)
         server.sendmail(sender_email, receiver_email, text)
-        
-        return True,"success"
-    except smtplib.SMTPException as e:
-        return False,str(e)
+        return True
     except Exception as e:
-        return False,str(e)
+        raise Exception(str(e))
     finally:
         if server:
             server.quit()  # Close the connection

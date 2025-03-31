@@ -1,7 +1,7 @@
 from celery import shared_task
 from datetime import datetime
 from .models import EmailPNRStatus
-from .emails import send_email
+from .emails import send_email,admin_email
 from MainApp.utils import get_pnr_status_internal,format_pnr_status_text
 
 @shared_task
@@ -68,7 +68,7 @@ def send_pnr_status_once(pnr,email):
             send_email(email,subject,massage)
         else:
             subject = "Error Occured!"
-            send_email(email,subject,error)
+            send_email(admin_email,subject,error)
         return True
     except Exception:
         return False
@@ -76,6 +76,11 @@ def send_pnr_status_once(pnr,email):
 
 @shared_task
 def send_otp_on_email(email,otp):
-    subject = "Email Verification!"
-    message = f"Hi there!\n\n Here is the OTP: {otp}"
-    send_email(email,subject,message)
+    try:
+        subject = "Email Verification!"
+        message = f"Hi there!\n\n Here is the OTP: {otp}"
+        send_email(email,subject,message)
+        return True
+    except Exception as e:
+        # print(str(e))
+        return False
