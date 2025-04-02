@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:8080 PNRStatusTracker.wsgi
+web: gunicorn PNRStatusTracker.wsgi
