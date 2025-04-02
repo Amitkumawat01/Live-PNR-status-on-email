@@ -35,8 +35,9 @@ if os.environ.get('ENVIRONMENT')=='development':
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','pnr-project.up.railway.app']
 
+CSRF_TRUSTED_ORIGINS = ['https://pnr-project.up.railway.app']
 
 # Application definition
 
