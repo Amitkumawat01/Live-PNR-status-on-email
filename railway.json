@@ -1,0 +1,24 @@
+{
+    "name": "PNRStatusTracker",
+    "plugins": [
+      {
+        "plugin": "nixpacks",
+        "options": {
+          "setup": [
+            "python39",
+            "postgresql_16", 
+            "gcc",
+            "build-essential", "libpq-dev", "libopencv-dev"
+          ],
+          "install": "pip install -r requirements.txt",
+          "start": "gunicorn PNRStatusTracker.wsgi:application --bind 0.0.0.0:8000"
+        }
+      },
+      {
+        "plugin": "postgresql", 
+        "options": {
+          "version": "16" 
+        }
+      }
+    ]
+  }
