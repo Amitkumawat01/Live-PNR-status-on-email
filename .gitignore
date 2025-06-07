@@ -1,5 +1,6 @@
 axial-entity-453910-t9-8d37a640689f.json
 venv/
-__pychache__/
+__pycache__/
 .env
 .DS_Store
+.gitignore
