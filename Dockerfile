@@ -49,8 +49,5 @@ COPY --chown=app:app . .
 # Switch to the non-root user
 USER app
 
-# Run collectstatic to gather all static files
-RUN python manage.py collectstatic --noinput
-
 # Set the correct path to your project's WSGI application
 CMD ["gunicorn", "PNRStatusTracker.wsgi:application"]
