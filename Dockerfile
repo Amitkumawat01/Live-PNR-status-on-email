@@ -1,7 +1,7 @@
 # Dockerfile
 
 # --- Builder Stage ---
-# CHANGE 1: Match your local Python version
+# Use an official Python runtime. Change the version to match yours (e.g., 3.11, 3.9)
 FROM python:3.9-slim-buster as builder
 
 # Set environment variables to prevent Python from writing .pyc files and to run in unbuffered mode
@@ -20,7 +20,7 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 
 
 # --- Final Stage ---
-# CHANGE 1 (Again): Match your local Python version
+# Start from a fresh, slim Python image
 FROM python:3.9-slim-buster
 
 # Create a dedicated, non-root user for security
@@ -29,8 +29,11 @@ RUN addgroup --system app && adduser --system --group app
 # Set the working directory for the new user
 WORKDIR /home/app
 
+# ----------------- THE ONLY CHANGE IS ON THE NEXT LINE -----------------
 # Install only the RUNTIME system dependencies.
-RUN apt-get update && apt-get install -y libpq5 && rm -rf /var/lib/apt/lists/*
+# ADDED: libgl1 - this is a key dependency for headless OpenCV (cv2)
+RUN apt-get update && apt-get install -y libpq5 libgl1 && rm -rf /var/lib/apt/lists/*
+# -----------------------------------------------------------------------
 
 # Copy the pre-built Python packages ("wheels") from the builder stage
 COPY --from=builder /usr/src/app/wheels /wheels
@@ -46,5 +49,8 @@ COPY --chown=app:app . .
 # Switch to the non-root user
 USER app
 
-# CHANGE 2: Set the correct path to your project's WSGI application
+# Run collectstatic to gather all static files
+RUN python manage.py collectstatic --noinput
+
+# Set the correct path to your project's WSGI application
 CMD ["gunicorn", "PNRStatusTracker.wsgi:application"]
