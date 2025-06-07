@@ -53,8 +53,5 @@
     # Switch to the non-root user
     USER app
     
-    # Run collectstatic
-    RUN python manage.py collectstatic --noinput
-    
     # Set the correct CMD
     CMD ["gunicorn", "PNRStatusTracker.wsgi:application"]
