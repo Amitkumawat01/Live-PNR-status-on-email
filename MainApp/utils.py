@@ -117,7 +117,7 @@ def process_image():
         image = cv2.bitwise_not(image)
         image = cv2.resize(image, (150, 30))
 
-        cv2.imwrite("Captcha/0_p.png",image)
+        cv2.imwrite("Captcha/0.png",image)
         return save_location
     except Exception:
         return None

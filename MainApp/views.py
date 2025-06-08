@@ -35,7 +35,6 @@ class StatusView(View):
                 filepath = process_image()
                 if not filepath:
                     raise Exception("Error while downloading the Captcha Image.")
-                filepath = 'Captcha/0_p.png'
 
                 ocr_response = ocr_space_file(filepath)
                 
