@@ -8,7 +8,7 @@ from .utils import get_pnr_status,process_image,ocr_space_file,solve_captcha
 from .tasks import send_pnr_status_once,send_otp_on_email
 
 import random
-from PNRStatusTracker.settings import OCR_SPACE_API_KEY
+from PNRStatusTracker.settings import OCR_SPACE_API_KEY,APP_PASSWORD
 
 # Create your views here.
 class PNRFormView(View):
@@ -100,7 +100,7 @@ class EmailUpdatesView(View):
             del request.session['pnr']
             del request.session['email']
 
-            result = send_pnr_status_once.apply_async(args=[pnr,email])
+            result = send_pnr_status_once.apply_async(args=[pnr,email,APP_PASSWORD])
             # print(result)
             return render(request,'email_update.html',{'success':"All set! You will recieve PNR updates on your Email."})
         else:

@@ -53,7 +53,7 @@ def send_pnr_status_on_update():
 
             
 @shared_task
-def send_pnr_status_once(pnr,email):
+def send_pnr_status_once(pnr,email,APP_PASSWORD):
     try:
         try_ct=5
         while(try_ct):
@@ -65,10 +65,10 @@ def send_pnr_status_once(pnr,email):
         if response:
             subject = f"PNR status for {pnr}"
             massage = format_pnr_status_text(response)
-            send_email(email,subject,massage)
+            send_email(email,subject,massage,APP_PASSWORD)
         else:
             subject = "Error Occured!"
-            send_email(admin_email,subject,error)
+            send_email(admin_email,subject,error,APP_PASSWORD)
         return True
     except Exception:
         return False

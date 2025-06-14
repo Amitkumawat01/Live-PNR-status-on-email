@@ -114,8 +114,9 @@ def process_image():
 
         cv2.imwrite("Captcha/0.png",image)
         return save_location
-    except:
-        raise Exception("Unable to process the Captcha!")
+    except Exception as e:
+        raise Exception(f"Unable to process the Captcha! Error: {str(e)}")
+
 
 def solve_captcha(text):
     try:

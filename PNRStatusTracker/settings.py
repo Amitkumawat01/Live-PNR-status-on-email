@@ -18,6 +18,7 @@ environ.Env.read_env(BASE_DIR / '.env')
 
 
 OCR_SPACE_API_KEY = env('OCR_SPACE_API_KEY')
+APP_PASSWORD = env('APP_PASSWORD')
 # --- Core Settings ---
 
 # SECURITY WARNING: keep the secret key used in production secret!
