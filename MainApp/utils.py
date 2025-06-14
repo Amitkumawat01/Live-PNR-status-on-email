@@ -4,9 +4,6 @@ import os
 from django.core import exceptions
 from MainApp.models import EmailPNRStatus
 
-
-API_KEY = os.environ.get("OCR_SPACE_API_KEY")
-
 session = requests.Session()
 
 def get_pnr_status_internal(pnr,email):
@@ -73,12 +70,10 @@ def download_image(url, save_path):
         with open(save_path, "wb") as file:
             for chunk in response.iter_content(chunk_size=8192):
                 file.write(chunk)
+    except:
+        raise Exception("Unable to get captcha from indianrail.gov.in")
 
-        return True
-    except requests.exceptions.RequestException:
-        return False
-
-def ocr_space_file(filename, overlay=False, api_key='K89036236388957', language='eng'):
+def ocr_space_file(filename, overlay=False, api_key=None, language='eng'):
     """ OCR.space API request with local file.
         Python3.5 - not tested on 2.7
     :param filename: Your file path & name.
@@ -108,8 +103,8 @@ def process_image():
         image_url = "https://www.indianrail.gov.in/enquiry/captchaDraw.png?1742047503843"
         save_location = "Captcha/0.png"
 
-        if not download_image(image_url, save_location):
-            raise Exception
+        download_image(image_url, save_location)
+        
         image = cv2.imread(save_location, cv2.IMREAD_UNCHANGED)
         trans_mask = image[:, :, 3] == 0
         image[trans_mask] = [255, 255, 255, 255]
@@ -119,33 +114,35 @@ def process_image():
 
         cv2.imwrite("Captcha/0.png",image)
         return save_location
-    except Exception:
-        return None
-
+    except:
+        raise Exception("Unable to process the Captcha!")
 
 def solve_captcha(text):
-    plus = 0
-    dig1 = 0
-    dig = 0
-    
-    for i in text:
-        if i=='=' or i=='?':
-            break
-        elif i == '+' or i == '-':
-            if i == '+':
-                plus = 1
-            dig1 = dig
-            dig = 0
-        elif '0'<=i and i<='9':
-            dig = dig * 10 + int(i)
-        else:
-            continue
+    try:
+        plus = 0
+        dig1 = 0
+        dig = 0
+        
+        for i in text:
+            if i=='=' or i=='?':
+                break
+            elif i == '+' or i == '-':
+                if i == '+':
+                    plus = 1
+                dig1 = dig
+                dig = 0
+            elif '0'<=i and i<='9':
+                dig = dig * 10 + int(i)
+            else:
+                continue
 
-    if plus:
-        dig1 += dig
-    else:
-        dig1 -= dig
-    return dig1
+        if plus:
+            dig1 += dig
+        else:
+            dig1 -= dig
+        return dig1
+    except:
+        raise Exception("Unable to solve the Captcha!")
 
 def get_pnr_status(captcha, pnr_number):
 

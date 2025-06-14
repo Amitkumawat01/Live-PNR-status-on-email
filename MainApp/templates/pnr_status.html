@@ -146,10 +146,10 @@
                     {% for passenger in response.passengerList %}
                         <tr>
                             <td>{{ passenger.passengerSerialNumber }}</td>
-                            <td>{{ passenger.bookingStatus }}</td>
-                            <td>{{ passenger.bookingCoachId }}</td>
-                            <td>{{ passenger.bookingBerthNo }} ({{ passenger.bookingBerthCode }})</td>
-                            <td>{{ passenger.currentStatus }}</td>
+                            <td>{{ passenger.bookingStatusDetails }}</td>
+                            <td>{{ passenger.currentCoachId }}</td>
+                            <td>{{ passenger.currentBerthNo }}</td>
+                            <td>{{ passenger.currentStatusDetails }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

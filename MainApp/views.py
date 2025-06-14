@@ -8,6 +8,7 @@ from .utils import get_pnr_status,process_image,ocr_space_file,solve_captcha
 from .tasks import send_pnr_status_once,send_otp_on_email
 
 import random
+from PNRStatusTracker.settings import OCR_SPACE_API_KEY
 
 # Create your views here.
 class PNRFormView(View):
@@ -33,10 +34,8 @@ class StatusView(View):
             try_ct=5
             for i in range(try_ct):
                 filepath = process_image()
-                if not filepath:
-                    raise Exception("Error while downloading the Captcha Image.")
 
-                ocr_response = ocr_space_file(filepath)
+                ocr_response = ocr_space_file(filepath,api_key=OCR_SPACE_API_KEY)
                 
                 # Check for errors in the API response
                 if ocr_response.get("OCRExitCode") != 1:
@@ -57,11 +56,11 @@ class StatusView(View):
                 if response_data.get('trainNumber'):
                     return render(request, 'pnr_status.html', {'response': response_data})
                 
-            error_message = f"Invalid Captcha or PNR Number."
+            error_message = response_data.get('errorMessage','Captcha not matched')
             return render(request, 'pnr_status.html', {'response': error_message}) # Pass error to template
 
         except Exception as e:
-            return render(request, 'pnr_status.html', {'response': "StatusView: "+str(e)})
+            return render(request, 'pnr_status.html', {'response': "Exception occurred"})
 
     def post(self,request):
         if request.POST.get('email'):

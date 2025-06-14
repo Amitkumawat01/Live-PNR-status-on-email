@@ -17,6 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(BASE_DIR / '.env')
 
 
+OCR_SPACE_API_KEY = env('OCR_SPACE_API_KEY')
 # --- Core Settings ---
 
 # SECURITY WARNING: keep the secret key used in production secret!
