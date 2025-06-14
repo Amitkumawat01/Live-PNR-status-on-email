@@ -60,7 +60,7 @@ class StatusView(View):
             return render(request, 'pnr_status.html', {'response': error_message}) # Pass error to template
 
         except Exception as e:
-            return render(request, 'pnr_status.html', {'response': "Exception occurred"})
+            return render(request, 'pnr_status.html', {'response': f"Exception occurred: {str(e)}"})
 
     def post(self,request):
         if request.POST.get('email'):
